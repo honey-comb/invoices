@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "HoneyComb\\Invoice\\": "src/"
+            "HoneyComb\\Invoices\\": "src/"
         },
         "files": [
             "src/Helpers/helpers.php"

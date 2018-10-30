@@ -54,4 +54,12 @@ class HCInvoiceSeries extends HCModel
         'padding',
         'sequence',
     ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'padding' => 'int',
+        'sequence' => 'string',
+    ];
 }

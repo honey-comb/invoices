@@ -29,7 +29,7 @@ declare(strict_types = 1);
 
 namespace Tests;
 
-use HoneyComb\Invoice\Providers\HCInvoiceServiceProvider;
+use HoneyComb\Invoices\Providers\HCInvoiceServiceProvider;
 use Illuminate\Foundation\Application;
 
 /**

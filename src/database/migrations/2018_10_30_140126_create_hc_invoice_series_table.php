@@ -46,7 +46,7 @@ class CreateHcInvoiceSeriesTable extends Migration
             $table->datetime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->datetime('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('padding')->default(5);
-            $table->integer('sequence')->unsigned();
+            $table->integer('sequence')->unsigned()->default(0);
         });
     }
 

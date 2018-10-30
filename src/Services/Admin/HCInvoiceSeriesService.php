@@ -58,4 +58,27 @@ class HCInvoiceSeriesService
     {
         return $this->repository;
     }
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    public function getInvoiceCode(string $code): string
+    {
+        $code = strtoupper($code);
+
+        $record = $this->getRepository()->makeQuery()->firstOrCreate(['id' => $code]);
+
+        $record->increment('sequence');
+
+        return sprintf('%s-%s',
+            $record->id,
+            str_pad(
+                $record->sequence,
+                is_null($record->padding) ? 5 : $record->padding,
+                '0',
+                STR_PAD_LEFT
+            )
+        );
+    }
 }

@@ -29,6 +29,7 @@ declare(strict_types = 1);
 
 namespace HoneyComb\Invoices\Providers;
 
+use HoneyComb\Invoices\Services\Admin\HCInvoiceSeriesService;
 use HoneyComb\Starter\Providers\HCBaseServiceProvider;
 
 /**
@@ -62,4 +63,20 @@ class HCInvoiceServiceProvider extends HCBaseServiceProvider
      * @var string
      */
     protected $packageName = 'HCInvoices';
+
+    /**
+     *
+     */
+    public function register(): void
+    {
+        $this->registerServices();
+    }
+
+    /**
+     *
+     */
+    private function registerServices(): void
+    {
+        $this->app->singleton(HCInvoiceSeriesService::class);
+    }
 }
