@@ -1,0 +1,62 @@
+{
+    "name": "honey-comb/invoices",
+    "description": "",
+    "keywords": ["honeycomb", "honey", "laravel", "invoices"],
+    "homepage": "https://github.com/honey-comb/invoices",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jevgenij Dmitrijev",
+            "email": "jd@interactivesolutions.lt"
+        },
+        {
+            "name": "Mantas Paulauskas",
+            "email": "mp@interactivesolutions.lt"
+        },
+        {
+            "name": "Zygimantas Gylys",
+            "email": "zygimantas.gylys@gmail.com"
+        }
+    ],
+    "repositories": [],
+    "require": {
+        "php": "^7.1",
+        "laravel/framework": "5.6.*",
+        "honey-comb/starter": "0.2.*",
+        "honey-comb/core": "0.3.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "orchestra/testbench-browser-kit": "^3.6",
+        "phpunit/phpunit": "~7.0",
+        "codedungeon/phpunit-result-printer": "^0.19"
+    },
+    "autoload": {
+        "psr-4": {
+            "HoneyComb\\Invoice\\": "src/"
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HoneyComb\\Invoices\\Providers\\HCInvoiceServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": [
+            "paratest -p4 --colors"
+        ]
+    },
+    "config": {
+        "secure-http": false
+    }
+}

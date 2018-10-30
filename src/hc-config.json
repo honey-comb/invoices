@@ -1,0 +1,32 @@
+{
+    "general": {
+        "packageName": "HCInvoices",
+        "sequence": 0,
+        "namespace": "HoneyComb\\Invoices\\"
+    },
+    "formData": {},
+    "adminMenu": [
+        {
+            "route": "admin.invoices.series.index",
+            "parent": "admin.index",
+            "translation": "HCInvoices::invoices_series.page_title",
+            "icon": "sort-numeric-up",
+            "aclPermission": "honey_comb_invoices_invoices_series_admin_list"
+        }
+    ],
+    "seeder": "HoneyComb\\Invoices\\Database\\Seeds\\HCInvoiceSeeder",
+    "routes": [
+        "Routes\/Admin\/routes.invoices.series.php"
+    ],
+    "acl": {
+        "permissions": [
+            {
+                "name": "acl.invoices.series",
+                "controller": "\\HoneyComb\\Invoices\\Http\\Controllers\\Admin\\HCInvoiceSeriesController",
+                "actions": [
+                    "honey_comb_invoices_invoices_series_admin_list"
+                ]
+            }
+        ]
+    }
+}
