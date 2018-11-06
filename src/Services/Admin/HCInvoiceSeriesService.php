@@ -29,6 +29,7 @@ declare(strict_types = 1);
 
 namespace HoneyComb\Invoices\Services\Admin;
 
+use HoneyComb\Invoices\Models\HCInvoiceSeries;
 use HoneyComb\Invoices\Repositories\Admin\HCInvoiceSeriesRepository;
 
 /**
@@ -65,20 +66,48 @@ class HCInvoiceSeriesService
      */
     public function getInvoiceCode(string $code): string
     {
+        $record = $this->createCode($code);
+
+        return sprintf('%s-%s', $record->id, $this->formatSequence($record));
+    }
+
+    /**
+     * @param string $code
+     * @return array
+     */
+    public function getInvoiceCodeAsArray(string $code): array
+    {
+        $record = $this->createCode($code);
+
+        return [
+            'series' => $record->id,
+            'sequence' => $this->formatSequence($record),
+        ];
+    }
+
+    /**
+     * @param string $code
+     * @return HCInvoiceSeries
+     */
+    protected function createCode(string $code): HCInvoiceSeries
+    {
         $code = strtoupper($code);
 
         $record = $this->getRepository()->makeQuery()->firstOrCreate(['id' => $code]);
 
         $record->increment('sequence');
 
-        return sprintf('%s-%s',
-            $record->id,
-            str_pad(
-                $record->sequence,
-                is_null($record->padding) ? 5 : $record->padding,
-                '0',
-                STR_PAD_LEFT
-            )
-        );
+        return $record;
+    }
+
+    /**
+     * @param $record
+     * @return string
+     */
+    protected function formatSequence(HCInvoiceSeries $record): string
+    {
+        $padding = is_null($record->padding) ? 5 : $record->padding;
+
+        return str_pad($record->sequence, $padding, '0', STR_PAD_LEFT);
     }
 }
