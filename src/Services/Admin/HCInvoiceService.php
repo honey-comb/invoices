@@ -29,6 +29,10 @@ declare(strict_types = 1);
 
 namespace HoneyComb\Invoices\Services\Admin;
 
+use HoneyComb\Invoices\Enum\HCInvoiceStatusEnum;
+use HoneyComb\Invoices\Exceptions\HCInvoiceException;
+use HoneyComb\Invoices\Http\Controllers\Admin\InvoiceException;
+use HoneyComb\Invoices\Models\HCInvoice;
 use HoneyComb\Invoices\Repositories\Admin\HCInvoiceRepository;
 
 /**
@@ -43,12 +47,19 @@ class HCInvoiceService
     private $repository;
 
     /**
+     * @var HCInvoiceSeriesService
+     */
+    private $invoiceSeriesService;
+
+    /**
      * HCInvoiceService constructor.
      * @param HCInvoiceRepository $repository
+     * @param HCInvoiceSeriesService $invoiceSeriesService
      */
-    public function __construct(HCInvoiceRepository $repository)
+    public function __construct(HCInvoiceRepository $repository, HCInvoiceSeriesService $invoiceSeriesService)
     {
         $this->repository = $repository;
+        $this->invoiceSeriesService = $invoiceSeriesService;
     }
 
     /**
@@ -57,5 +68,301 @@ class HCInvoiceService
     public function getRepository(): HCInvoiceRepository
     {
         return $this->repository;
+    }
+
+    /**
+     * @param array $invoiceData
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function createAdvanceInvoice(array $invoiceData): HCInvoice
+    {
+        $this->validateInvoiceData($invoiceData);
+
+        $invoiceData['status'] = HCInvoiceStatusEnum::advanced()->id();
+        $invoiceData['series'] = null;
+        $invoiceData['sequence'] = null;
+
+        $invoice = $this->getRepository()->create($invoiceData);
+
+        foreach ($invoiceData['items'] as $invoiceItem) {
+            $invoice->items()->create($invoiceItem);
+        }
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+    }
+
+    /**
+     * @param string $series
+     * @param array $invoiceData
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function createIssueInvoice(string $series, array $invoiceData): HCInvoice
+    {
+        $this->validateInvoiceData($invoiceData);
+
+        $invoiceData['status'] = HCInvoiceStatusEnum::issued()->id();
+
+        // add invoice code
+        $invoiceData = array_merge(
+            $invoiceData,
+            $this->invoiceSeriesService->getInvoiceCodeAsArray($series)
+        );
+
+        $invoice = $this->getRepository()->create($invoiceData);
+
+        foreach ($invoiceData['items'] as $invoiceItem) {
+            $invoice->items()->create($invoiceItem);
+        }
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+    }
+
+    /**
+     * @param string $series
+     * @param array $invoiceData
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function createPayedInvoice(string $series, array $invoiceData): HCInvoice
+    {
+        $this->validateInvoiceData($invoiceData);
+
+        $invoiceData['status'] = HCInvoiceStatusEnum::payed()->id();
+
+        // add invoice code
+        $invoiceData = array_merge(
+            $invoiceData,
+            $this->invoiceSeriesService->getInvoiceCodeAsArray($series)
+        );
+
+        $invoice = $this->getRepository()->create($invoiceData);
+
+        foreach ($invoiceData['items'] as $invoiceItem) {
+            $invoice->items()->create($invoiceItem);
+        }
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+    }
+
+    /**
+     * @param string $invoiceId
+     * @param string $status
+     * @param null $series
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function changeInvoiceStatus(string $invoiceId, string $status, $series = null): void
+    {
+        switch ($status) {
+            case HCInvoiceStatusEnum::issued()->id():
+                $this->changeStatusToIssued($invoiceId, $series);
+                break;
+
+            case HCInvoiceStatusEnum::payed()->id():
+                $this->changeStatusToPayed($invoiceId, $series);
+                break;
+
+            case HCInvoiceStatusEnum::canceled()->id():
+                $this->changeStatusToCanceled($invoiceId);
+                break;
+
+            case HCInvoiceStatusEnum::recalled()->id():
+                $this->changeStatusToRecalled($invoiceId);
+
+                break;
+            default:
+                throw new HCInvoiceException('Incorrect status');
+        }
+    }
+
+    /**
+     * @param array $invoiceData
+     * @throws HCInvoiceException
+     */
+    protected function validateInvoiceData(array $invoiceData): void
+    {
+        if (!array_has($invoiceData, [
+            'primary_currency',
+            'buyer_raw',
+            'amount',
+            'vat',
+            'amount_total',
+            'items',
+        ])) {
+            throw new HCInvoiceException('Invoice data missing required fields');
+        }
+
+        foreach ($invoiceData['items'] as $invoiceItemData) {
+            if (!array_has($invoiceItemData, [
+                'label',
+                'quantity',
+                'unit_type',
+                'unit_price',
+                'discount',
+                'amount',
+                'vat',
+                'amount_total',
+            ])) {
+                throw new HCInvoiceException('Invoice item data missing required fields');
+            }
+        }
+    }
+
+    /**
+     * @param string $invoiceId
+     * @param string|null $series
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function changeStatusToIssued(string $invoiceId, string $series = null): HCInvoice
+    {
+        if (is_null($series)) {
+            throw new HCInvoiceException('Series parameter is required!');
+        }
+
+        $invoice = $this->getRepository()->findOrFail($invoiceId);
+
+        if ($invoice->status != HCInvoiceStatusEnum::advanced()->id()) {
+            // TODO add to translations
+            throw new HCInvoiceException('To change invoice id status to issued invoice status must be advanced');
+        }
+
+        list($seriesInfo['code'], $seriesInfo['sequence']) = $this->invoiceSeriesService->getInvoiceCodeAsArray($series);
+
+        $invoice->series = $seriesInfo['code'];
+        $invoice->sequence = $seriesInfo['sequence'];
+        $invoice->status = HCInvoiceStatusEnum::issued()->id();
+        $invoice->save();
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+    }
+
+    /**
+     * @param string $invoiceId
+     * @param string|null $series
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function changeStatusToPayed(string $invoiceId, string $series = null): HCInvoice
+    {
+        if (is_null($series)) {
+            throw new HCInvoiceException('Series parameter is required!');
+        }
+
+        $invoice = $this->getRepository()->findOrFail($invoiceId);
+
+        if (in_array($invoice->status, [
+            HCInvoiceStatusEnum::canceled()->id(),
+            HCInvoiceStatusEnum::recalled()->id(),
+        ])) {
+            // TODO add to translations
+            throw new HCInvoiceException('Invoice is canceled!');
+        }
+
+        // change to issued
+        if ($invoice->status == HCInvoiceStatusEnum::advanced()->id()) {
+            $invoice = $this->changeStatusToIssued($invoiceId, $series);
+        }
+
+        // change to payed
+        $invoice->status = HCInvoiceStatusEnum::payed()->id();
+        $invoice->save();
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+
+    }
+
+    /**
+     * @param string $invoiceId
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function changeStatusToCanceled(string $invoiceId): HCInvoice
+    {
+        $invoice = $this->getRepository()->findOrFail($invoiceId);
+
+        if ($invoice->status != HCInvoiceStatusEnum::issued()->id()) {
+            // TODO add to translations
+            throw new HCInvoiceException('To change status to canceled invoice status must be issued!');
+        }
+
+        // change to canceled
+        $invoice->status = HCInvoiceStatusEnum::canceled()->id();
+        $invoice->save();
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+    }
+
+    /**
+     * @param string $invoiceId
+     * @return HCInvoice
+     * @throws HCInvoiceException
+     * @throws \ReflectionException
+     */
+    public function changeStatusToRecalled(string $invoiceId): HCInvoice
+    {
+        $invoice = $this->getRepository()->findOrFail($invoiceId);
+
+        if ($invoice->status != HCInvoiceStatusEnum::advanced()->id()) {
+            // TODO add to translations
+            throw new HCInvoiceException('To change status to recalled invoice status must be advanced!');
+        }
+
+        // change to canceled
+        $invoice->status = HCInvoiceStatusEnum::recalled()->id();
+        $invoice->save();
+
+        // log to history
+        $invoice->history()->create([
+            'status' => $invoice->status,
+        ]);
+
+        // TODO add events
+        return $invoice;
+
     }
 }
