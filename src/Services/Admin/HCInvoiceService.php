@@ -84,19 +84,20 @@ class HCInvoiceService
         $invoiceData['series'] = null;
         $invoiceData['sequence'] = null;
 
+//        dd(array_except($invoiceData, 'items'));
         $invoice = $this->getRepository()->create($invoiceData);
 
         foreach ($invoiceData['items'] as $invoiceItem) {
-            $invoice->items()->create($invoiceItem);
+            $invoice->items()->create($invoiceItem + ['currency' => $invoiceData['primary_currency']]);
         }
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
+        return $this->getRepository()->findOrFail($invoice->id);
     }
 
     /**
@@ -121,16 +122,16 @@ class HCInvoiceService
         $invoice = $this->getRepository()->create($invoiceData);
 
         foreach ($invoiceData['items'] as $invoiceItem) {
-            $invoice->items()->create($invoiceItem);
+            $invoice->items()->create($invoiceItem + ['currency' => $invoiceData['primary_currency']]);
         }
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
+        return $this->getRepository()->findOrFail($invoice->id);
     }
 
     /**
@@ -155,16 +156,16 @@ class HCInvoiceService
         $invoice = $this->getRepository()->create($invoiceData);
 
         foreach ($invoiceData['items'] as $invoiceItem) {
-            $invoice->items()->create($invoiceItem);
+            $invoice->items()->create($invoiceItem + ['currency' => $invoiceData['primary_currency']]);
         }
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
+        return $this->getRepository()->findOrFail($invoice->id);
     }
 
     /**
@@ -259,12 +260,12 @@ class HCInvoiceService
         $invoice->save();
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
+        return $this->getRepository()->findOrFail($invoice->id);
     }
 
     /**
@@ -300,12 +301,12 @@ class HCInvoiceService
         $invoice->save();
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
+        return $this->getRepository()->findOrFail($invoice->id);
 
     }
 
@@ -329,12 +330,12 @@ class HCInvoiceService
         $invoice->save();
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
+        return $this->getRepository()->findOrFail($invoice->id);
     }
 
     /**
@@ -357,12 +358,11 @@ class HCInvoiceService
         $invoice->save();
 
         // log to history
-        $invoice->history()->create([
+        $invoice->statusHistory()->create([
             'status' => $invoice->status,
         ]);
 
         // TODO add events
-        return $invoice;
-
+        return $this->getRepository()->findOrFail($invoice->id);
     }
 }

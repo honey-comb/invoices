@@ -35,8 +35,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Class HCUserServiceTest
- * @package Tests\Feature\Controllers
+ * Class HCInvoiceSeriesServiceTest
+ * @package Tests\Services
  */
 class HCInvoiceSeriesServiceTest extends TestCase
 {
@@ -44,7 +44,7 @@ class HCInvoiceSeriesServiceTest extends TestCase
 
     /**
      * @test
-     * @group userService
+     * @group invoice-series-service
      */
     public function it_must_create_singleton_instance(): void
     {
@@ -109,7 +109,7 @@ class HCInvoiceSeriesServiceTest extends TestCase
 
     /**
      * @test
-     * @group invoice-series-services
+     * @group invoice-series-service
      */
     public function it_must_generate_correct_series_as_array(): void
     {

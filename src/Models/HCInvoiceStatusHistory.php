@@ -39,11 +39,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class HCInvoiceStatusHistory extends HCModel
 {
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'hc_invoice';
+    protected $table = 'hc_invoice_status_history';
 
     /**
      * The attributes that are mass assignable.

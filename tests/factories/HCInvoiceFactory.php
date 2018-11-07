@@ -25,50 +25,26 @@
  * https://innovationbase.eu
  */
 
-declare(strict_types = 1);
+use Faker\Generator as Faker;
 
-namespace HoneyComb\Invoices\Models;
+/*
+|--------------------------------------------------------------------------
+| Model Factories
+|--------------------------------------------------------------------------
+|
+| This directory should contain each of the model factory definitions for
+| your application. Factories provide a convenient way to generate new
+| model instances for testing / seeding your application's database.
+|
+*/
 
-use HoneyComb\Starter\Models\HCUuidModel;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-/**
- * Class HCInvoiceItem
- * @package HoneyComb\Invoices\Models
- */
-class HCInvoiceItem extends HCUuidModel
-{
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'hc_invoice_item';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'id',
-        'invoice_id',
-        'label',
-        'quantity',
-        'unit_type',
-        'unit_price',
-        'discount',
-        'amount',
-        'vat',
-        'amount_total',
-        'currency',
+$factory->define(\HoneyComb\Invoices\Models\HCInvoice::class, function (Faker $faker) {
+    return [
+        'primary_currency' => 'EUR',
+        'seller_raw' => $faker->text,
+        'buyer_raw' => $faker->text,
+        'amount' => rand(1, 30), $faker->randomFloat(1, 100),
+        'vat' => 0,
+        'amount_total' => rand(1, 30), $faker->randomFloat(1, 100),
     ];
-
-    /**
-     * @return BelongsTo
-     */
-    public function invoice(): BelongsTo
-    {
-        return $this->belongsTo(HCInvoice::class, 'id', 'invoice_id');
-    }
-}
+});

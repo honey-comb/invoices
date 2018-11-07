@@ -53,7 +53,7 @@ class CreateHcInvoiceTable extends Migration
             $table->enum('status', ['advanced', 'issued', 'payed', 'recalled', 'canceled']);
 
             $table->string('series', 10)->nullable();
-            $table->integer('sequence')->nullable();
+            $table->string('sequence', 10)->nullable();
 
             $table->string('primary_currency', 3);
 

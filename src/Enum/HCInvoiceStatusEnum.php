@@ -42,7 +42,7 @@ class HCInvoiceStatusEnum extends Enumerable
      */
     final public static function advanced(): HCInvoiceStatusEnum
     {
-        return self::make(0, trans('HCInvoices::invoices.enum.advanced'), 'just created invoice');
+        return self::make('advanced', trans('HCInvoices::invoices.enum.advanced'), 'just created invoice');
     }
 
     /**
@@ -51,7 +51,7 @@ class HCInvoiceStatusEnum extends Enumerable
      */
     final public static function issued(): HCInvoiceStatusEnum
     {
-        return self::make(0, trans('HCInvoices::invoices.enum.issued'), 'active invoice');
+        return self::make('issued', trans('HCInvoices::invoices.enum.issued'), 'active invoice');
     }
 
     /**
@@ -60,7 +60,7 @@ class HCInvoiceStatusEnum extends Enumerable
      */
     final public static function payed(): HCInvoiceStatusEnum
     {
-        return self::make(0, trans('HCInvoices::invoices.enum.payed'), 'payed invoice');
+        return self::make('payed', trans('HCInvoices::invoices.enum.payed'), 'payed invoice');
     }
 
     /**
@@ -69,7 +69,7 @@ class HCInvoiceStatusEnum extends Enumerable
      */
     final public static function recalled(): HCInvoiceStatusEnum
     {
-        return self::make(0, trans('HCInvoices::invoices.enum.recalled'), 'canceled advanced invoice');
+        return self::make('recalled', trans('HCInvoices::invoices.enum.recalled'), 'canceled advanced invoice');
     }
 
     /**
@@ -78,6 +78,6 @@ class HCInvoiceStatusEnum extends Enumerable
      */
     final public static function canceled(): HCInvoiceStatusEnum
     {
-        return self::make(0, trans('HCInvoices::invoices.enum.canceled'), 'canceled issued invoice');
+        return self::make('canceled', trans('HCInvoices::invoices.enum.canceled'), 'canceled issued invoice');
     }
 }
