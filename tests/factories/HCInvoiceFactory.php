@@ -43,8 +43,8 @@ $factory->define(\HoneyComb\Invoices\Models\HCInvoice::class, function (Faker $f
         'primary_currency' => 'EUR',
         'seller_raw' => $faker->text,
         'buyer_raw' => $faker->text,
-        'amount' => rand(1, 30), $faker->randomFloat(1, 100),
+        'amount' => $faker->randomFloat(1, 100),
         'vat' => 0,
-        'amount_total' => rand(1, 30), $faker->randomFloat(1, 100),
+        'amount_total' => $faker->randomFloat(1, 100),
     ];
 });

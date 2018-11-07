@@ -252,9 +252,9 @@ class HCInvoiceService
             throw new HCInvoiceException('To change invoice id status to issued invoice status must be advanced');
         }
 
-        list($seriesInfo['code'], $seriesInfo['sequence']) = $this->invoiceSeriesService->getInvoiceCodeAsArray($series);
+        $seriesInfo = $this->invoiceSeriesService->getInvoiceCodeAsArray($series);
 
-        $invoice->series = $seriesInfo['code'];
+        $invoice->series = $seriesInfo['series'];
         $invoice->sequence = $seriesInfo['sequence'];
         $invoice->status = HCInvoiceStatusEnum::issued()->id();
         $invoice->save();

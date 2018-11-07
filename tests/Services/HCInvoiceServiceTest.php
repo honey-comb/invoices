@@ -29,9 +29,11 @@ declare(strict_types = 1);
 
 namespace Tests\Services;
 
+use HoneyComb\Invoices\Enum\HCInvoiceStatusEnum;
 use HoneyComb\Invoices\Exceptions\HCInvoiceException;
 use HoneyComb\Invoices\Models\HCInvoice;
 use HoneyComb\Invoices\Services\Admin\HCInvoiceService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -174,7 +176,7 @@ class HCInvoiceServiceTest extends TestCase
 
     /**
      * @test
-     * @group invoice-services
+     * @group invoice-service
      */
     public function it_must_create_payed_invoice(): void
     {
@@ -223,6 +225,190 @@ class HCInvoiceServiceTest extends TestCase
         $this->assertDatabaseHas('hc_invoice_status_history', [
             'invoice_id' => $result->id,
             'status' => 'payed',
+        ]);
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_change_invoice_status_to_advance(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::payed()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('Incorrect status');
+        $this->getTestClassInstance()->changeInvoiceStatus($invoice->id, HCInvoiceStatusEnum::advanced()->id());
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_change_invoice_status_to_issued_without_series_param(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::advanced()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('Series parameter is required!');
+
+        $this->getTestClassInstance()->changeInvoiceStatus($invoice->id, HCInvoiceStatusEnum::issued()->id());
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_change_in_directly_method_invoice_status_to_issued_without_series_param(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::advanced()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('Series parameter is required!');
+
+        $this->getTestClassInstance()->changeStatusToIssued($invoice->id);
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_to_change_if_invoice_doesnt_exists(): void
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        $this->getTestClassInstance()->changeStatusToIssued('invoice-uuid', 'HC');
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_to_change_to_advanced_if_invoice_status_is_not_advanced(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::payed()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('To change invoice id status to issued invoice status must be advanced');
+
+        $this->getTestClassInstance()->changeStatusToIssued($invoice->id, 'HC');
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_change_status_to_issued_and_generate_series_and_sequence_and_log_to_history(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::advanced()->id(),
+            'series' => null,
+            'sequence' => null,
+        ]);
+
+        $invoice = $this->getTestClassInstance()->changeStatusToIssued($invoice->id, 'HC');
+
+        $this->assertSame('HC', $invoice->series);
+        $this->assertSame('00001', $invoice->sequence);
+        $this->assertSame(HCInvoiceStatusEnum::issued()->id(), $invoice->status);
+
+        $this->assertDatabaseHas('hc_invoice', [
+            'series' => $invoice->series,
+            'sequence' => $invoice->sequence,
+            'status' => HCInvoiceStatusEnum::issued()->id(),
+        ]);
+
+        $this->assertDatabaseHas('hc_invoice_status_history', [
+            'invoice_id' => $invoice->id,
+            'status' => HCInvoiceStatusEnum::issued()->id(),
+        ]);
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_to_change_status_if_invoice_is_already_canceled(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::canceled()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('Invoice is canceled!');
+
+        $this->getTestClassInstance()->changeStatusToPayed($invoice->id, 'HC');
+    }
+
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_change_status_to_payed_from_issued_and_log_to_history(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::issued()->id(),
+            'series' => 'HC',
+            'sequence' => '00001',
+        ]);
+
+        $invoice = $this->getTestClassInstance()->changeStatusToPayed($invoice->id, 'HC');
+
+        $this->assertSame('HC', $invoice->series);
+        $this->assertSame('00001', $invoice->sequence);
+        $this->assertSame(HCInvoiceStatusEnum::payed()->id(), $invoice->status);
+
+        $this->assertDatabaseHas('hc_invoice', [
+            'series' => $invoice->series,
+            'sequence' => $invoice->sequence,
+            'status' => HCInvoiceStatusEnum::payed()->id(),
+        ]);
+
+        $this->assertDatabaseHas('hc_invoice_status_history', [
+            'invoice_id' => $invoice->id,
+            'status' => HCInvoiceStatusEnum::payed()->id(),
+        ]);
+    }
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_change_status_to_payed_from_advanced_and_create_issued_between_and_log_to_history(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::advanced()->id(),
+        ]);
+
+        $invoice = $this->getTestClassInstance()->changeStatusToPayed($invoice->id, 'HC');
+
+        $this->assertSame('HC', $invoice->series);
+        $this->assertSame('00001', $invoice->sequence);
+        $this->assertSame(HCInvoiceStatusEnum::payed()->id(), $invoice->status);
+
+        $this->assertDatabaseHas('hc_invoice', [
+            'series' => $invoice->series,
+            'sequence' => $invoice->sequence,
+            'status' => HCInvoiceStatusEnum::payed()->id(),
+        ]);
+
+        $this->assertDatabaseHas('hc_invoice_status_history', [
+            'invoice_id' => $invoice->id,
+            'status' => HCInvoiceStatusEnum::issued()->id(),
+        ]);
+
+        $this->assertDatabaseHas('hc_invoice_status_history', [
+            'invoice_id' => $invoice->id,
+            'status' => HCInvoiceStatusEnum::payed()->id(),
         ]);
     }
 
