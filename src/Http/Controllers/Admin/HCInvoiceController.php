@@ -116,6 +116,8 @@ class HCInvoiceController extends HCBaseController
             'amount' => $this->headerText(trans('HCInvoices::invoices.amount')),
             'vat' => $this->headerText(trans('HCInvoices::invoices.vat')),
             'amount_total' => $this->headerText(trans('HCInvoices::invoices.amount_total')),
+            'discount_total' => $this->headerText(trans('HCInvoices::invoices.discount_total')),
+            'vat_total' => $this->headerText(trans('HCInvoices::invoices.vat_total')),
             'payment_method' => $this->headerText(trans('HCInvoices::invoices.payment_method')),
         ];
 

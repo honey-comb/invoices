@@ -40,10 +40,13 @@ use Faker\Generator as Faker;
 
 $factory->define(\HoneyComb\Invoices\Models\HCInvoiceItem::class, function (Faker $faker) {
     $currency = 'EUR';
-    $qantity = rand(1, 5);
+    $quantity = rand(1, 5);
     $unitPrice = $faker->randomFloat(3, 20);
-    $amount = $qantity * $unitPrice;
+    $amount = $quantity * $unitPrice;
     $vat = $faker->randomFloat(1, 2);
+    $vatTotal = $vat * $quantity;
+    $discount = $faker->randomFloat(0, 1);
+    $discountTotal = $discount * $quantity;
     $amountTotal = $amount + $vat;
 
     return [
@@ -55,12 +58,14 @@ $factory->define(\HoneyComb\Invoices\Models\HCInvoiceItem::class, function (Fake
             ])->id;
         },
         'label' => $faker->name,
-        'quantity' => $qantity,
+        'quantity' => $quantity,
         'unit_type' => array_rand(['kg', 'g', 'unit']),
         'unit_price' => $unitPrice,
-        'discount' => 0,
+        'discount' => $discount,
         'amount' => $amount,
         'vat' => $vat,
+        'vat_total' => $vatTotal,
+        'discount_total' => $discountTotal,
         'amount_total' => $amountTotal,
         'currency' => $currency,
     ];

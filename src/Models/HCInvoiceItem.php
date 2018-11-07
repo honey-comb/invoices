@@ -60,8 +60,10 @@ class HCInvoiceItem extends HCUuidModel
         'discount',
         'amount',
         'vat',
-        'amount_total',
         'currency',
+        'discount_total',
+        'vat_total',
+        'amount_total',
     ];
 
     /**

@@ -55,6 +55,8 @@ class CreateHcInvoiceItemTable extends Migration
             $table->float('discount', 20, 6)->default('0.000000');
             $table->float('amount', 20, 6)->default('0.000000');
             $table->float('vat', 20, 6)->default('0.000000');
+            $table->float('discount_total', 20, 6)->default('0.000000');
+            $table->float('vat_total', 20, 6)->default('0.000000');
             $table->float('amount_total', 20, 6)->default('0.000000');
             $table->string('currency', 3);
 

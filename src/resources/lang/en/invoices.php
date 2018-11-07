@@ -17,6 +17,9 @@ return [
     'amount' => 'Amount',
     'vat' => 'Vat',
     'amount_total' => 'Amount total',
+    'vat_total' => 'Vat_total',
+    'discount_total' => 'Discount total',
+    'discount' => 'Discount',
     'payment_method' => 'Payment method',
     'id' => 'Id',
 

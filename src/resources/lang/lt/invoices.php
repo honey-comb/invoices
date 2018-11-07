@@ -42,6 +42,9 @@ return [
     'amount' => 'Suma',
     'vat' => 'PVM',
     'amount_total' => 'Viso suma',
+    'vat_total' => 'PVM viso',
+    'discount' => 'Nuolaida',
+    'discount_total' => 'Nuolaida viso',
     'payment_method' => 'Mokėjimo būdas',
     'id' => 'Id',
 
