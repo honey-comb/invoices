@@ -57,7 +57,7 @@ class HCInvoiceSeriesServiceTest extends TestCase
      * @test
      * @group invoice-series-service
      */
-    public function it_must_generate_correct_series(): void
+    public function it_must_generate_correct_series_as_string(): void
     {
         $this->assertSame(
             'BR-00001',
@@ -104,6 +104,86 @@ class HCInvoiceSeriesServiceTest extends TestCase
         $this->assertSame(
             'TEST-02',
             $this->getTestClassInstance()->getInvoiceCode('test')
+        );
+    }
+
+    /**
+     * @test
+     * @group invoice-series-services
+     */
+    public function it_must_generate_correct_series_as_array(): void
+    {
+        $this->assertSame(
+            [
+            'series' => 'BR',
+            'sequence' => '00001',
+        ], $this->getTestClassInstance()->getInvoiceCodeAsArray('BR')
+        );
+
+        $this->assertSame(
+            [
+                'series' => 'BR',
+                'sequence' => '00002',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('BR')
+        );
+
+        $this->assertSame(
+            [
+                'series' => 'BR',
+                'sequence' => '00003',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('BR')
+        );
+
+        $this->assertSame(
+            [
+                'series' => 'B A R',
+                'sequence' => '00001',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('B A R')
+        );
+
+        $this->assertSame(
+            [
+                'series' => ' ',
+                'sequence' => '00001',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray(' ')
+        );
+
+        $this->assertSame(
+            [
+                'series' => '  ',
+                'sequence' => '00001',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('  ')
+        );
+
+        $this->assertSame(
+            [
+                'series' => '  ',
+                'sequence' => '00002',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('  ')
+        );
+
+        \DB::table('hc_invoice_series')->insert(['id' => 'TEST', 'padding' => 2]);
+
+        $this->assertSame(
+            [
+                'series' => 'TEST',
+                'sequence' => '01',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('test')
+        );
+
+        $this->assertSame(
+            [
+                'series' => 'TEST',
+                'sequence' => '02',
+            ],
+            $this->getTestClassInstance()->getInvoiceCodeAsArray('test')
         );
     }
 
