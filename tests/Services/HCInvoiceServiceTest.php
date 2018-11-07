@@ -413,6 +413,91 @@ class HCInvoiceServiceTest extends TestCase
     }
 
     /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_to_cancel_invoice_if_invoice_status_is_not_issued(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::advanced()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('To change status to canceled invoice status must be issued!');
+
+        $this->getTestClassInstance()->changeStatusToCanceled($invoice->id);
+    }
+
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_cancel_issued_invoice_and_log_to_history(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::issued()->id(),
+            'series' => 'HC',
+            'sequence' => '00001',
+        ]);
+
+        $invoice = $this->getTestClassInstance()->changeStatusToCanceled($invoice->id);
+
+        $this->assertSame(HCInvoiceStatusEnum::canceled()->id(), $invoice->status);
+
+        $this->assertDatabaseHas('hc_invoice', [
+            'status' => HCInvoiceStatusEnum::canceled()->id(),
+        ]);
+
+        $this->assertDatabaseHas('hc_invoice_status_history', [
+            'invoice_id' => $invoice->id,
+            'status' => HCInvoiceStatusEnum::canceled()->id(),
+        ]);
+    }
+
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_fail_to_cancel_invoice_status_to_recall_if_invoice_status_is_not_advanced(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::issued()->id(),
+        ]);
+
+        $this->expectException(HCInvoiceException::class);
+        $this->expectExceptionMessage('To change status to recalled invoice status must be advanced!');
+
+        $this->getTestClassInstance()->changeStatusToRecalled($invoice->id);
+    }
+
+
+    /**
+     * @test
+     * @group invoice-service
+     */
+    public function it_must_cancel_advanced_invoice_and_log_to_history(): void
+    {
+        $invoice = factory(HCInvoice::class)->create([
+            'status' => HCInvoiceStatusEnum::advanced()->id(),
+        ]);
+
+        $invoice = $this->getTestClassInstance()->changeStatusToRecalled($invoice->id);
+
+        $this->assertSame(HCInvoiceStatusEnum::recalled()->id(), $invoice->status);
+
+        $this->assertDatabaseHas('hc_invoice', [
+            'status' => HCInvoiceStatusEnum::recalled()->id(),
+        ]);
+
+        $this->assertDatabaseHas('hc_invoice_status_history', [
+            'invoice_id' => $invoice->id,
+            'status' => HCInvoiceStatusEnum::recalled()->id(),
+        ]);
+    }
+
+    /**
      * @return HCInvoiceService
      */
     private function getTestClassInstance(): HCInvoiceService
