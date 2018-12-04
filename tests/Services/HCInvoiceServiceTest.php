@@ -91,6 +91,7 @@ class HCInvoiceServiceTest extends TestCase
                     'amount' => 10.45,
                     'vat' => 2,
                     'amount_total' => 12.45,
+                    'currency' => 'EUR',
                 ],
             ],
         ]);
@@ -142,6 +143,7 @@ class HCInvoiceServiceTest extends TestCase
                     'amount' => 10.45,
                     'vat' => 2,
                     'amount_total' => 12.45,
+                    'currency' => 'EUR',
                 ],
             ],
         ]);
@@ -196,6 +198,7 @@ class HCInvoiceServiceTest extends TestCase
                     'amount' => 10.45,
                     'vat' => 2,
                     'amount_total' => 12.45,
+                    'currency' => 'EUR',
                 ],
             ],
         ]);

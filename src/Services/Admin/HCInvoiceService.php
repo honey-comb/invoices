@@ -84,11 +84,10 @@ class HCInvoiceService
         $invoiceData['series'] = null;
         $invoiceData['sequence'] = null;
 
-//        dd(array_except($invoiceData, 'items'));
         $invoice = $this->getRepository()->create($invoiceData);
 
         foreach ($invoiceData['items'] as $invoiceItem) {
-            $invoice->items()->create($invoiceItem + ['currency' => $invoiceData['primary_currency']]);
+            $invoice->items()->create($invoiceItem);
         }
 
         // log to history
@@ -122,7 +121,7 @@ class HCInvoiceService
         $invoice = $this->getRepository()->create($invoiceData);
 
         foreach ($invoiceData['items'] as $invoiceItem) {
-            $invoice->items()->create($invoiceItem + ['currency' => $invoiceData['primary_currency']]);
+            $invoice->items()->create($invoiceItem);
         }
 
         // log to history
@@ -156,7 +155,7 @@ class HCInvoiceService
         $invoice = $this->getRepository()->create($invoiceData);
 
         foreach ($invoiceData['items'] as $invoiceItem) {
-            $invoice->items()->create($invoiceItem + ['currency' => $invoiceData['primary_currency']]);
+            $invoice->items()->create($invoiceItem);
         }
 
         // log to history
@@ -214,6 +213,10 @@ class HCInvoiceService
             'items',
         ])) {
             throw new HCInvoiceException('Invoice data missing required fields');
+        }
+
+        if (empty($invoiceData['items'])) {
+            throw new HCInvoiceException('Invoice item data missing required fields');
         }
 
         foreach ($invoiceData['items'] as $invoiceItemData) {

@@ -76,6 +76,18 @@ class HCInvoiceServiceProvider extends HCBaseServiceProvider
     /**
      *
      */
+    protected function registerPublishes(): void
+    {
+        parent::registerPublishes();
+
+        $this->publishes([
+            __DIR__ . '../../../listeners' => app_path('Listeners'),
+        ], 'hc-invoice');
+    }
+
+    /**
+     *
+     */
     private function registerServices(): void
     {
         $this->app->singleton(HCInvoiceSeriesService::class);
