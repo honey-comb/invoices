@@ -160,9 +160,9 @@ class HCInvoiceDTO extends HCBaseDTO
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
