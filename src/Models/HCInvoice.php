@@ -71,6 +71,38 @@ class HCInvoice extends HCUuidSoftModel
     ];
 
     /**
+     * @var array
+     */
+    protected $appends = [
+        'seller',
+        'buyer',
+    ];
+
+    /**
+     * @return array
+     */
+    public function getBuyerAttribute(): array
+    {
+        if (filled($this->buyer_raw)) {
+            return json_decode($this->buyer_raw, true);
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getSellerAttribute(): array
+    {
+        if (filled($this->seller_raw)) {
+            return json_decode($this->seller_raw, true);
+        }
+
+        return [];
+    }
+
+    /**
      * @return HasMany
      */
     public function statusHistory(): HasMany
