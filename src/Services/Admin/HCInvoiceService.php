@@ -29,6 +29,7 @@ declare(strict_types = 1);
 
 namespace HoneyComb\Invoices\Services\Admin;
 
+use Carbon\Carbon;
 use HoneyComb\Invoices\Enum\HCInvoiceStatusEnum;
 use HoneyComb\Invoices\Exceptions\HCInvoiceException;
 use HoneyComb\Invoices\Http\Controllers\Admin\InvoiceException;
@@ -258,6 +259,7 @@ class HCInvoiceService
 
         $seriesInfo = $this->invoiceSeriesService->getInvoiceCodeAsArray($series);
 
+        $invoice->invoice_date = Carbon::now()->toDateTimeString();
         $invoice->series = $seriesInfo['series'];
         $invoice->sequence = $seriesInfo['sequence'];
         $invoice->status = HCInvoiceStatusEnum::issued()->id();
