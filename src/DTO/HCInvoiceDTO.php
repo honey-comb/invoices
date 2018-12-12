@@ -77,7 +77,7 @@ class HCInvoiceDTO extends HCBaseDTO
     private $sellerableType;
 
     /**
-     * @var string
+     * @var array|null
      */
     private $sellerRaw;
 
@@ -92,7 +92,7 @@ class HCInvoiceDTO extends HCBaseDTO
     private $buyerableType;
 
     /**
-     * @var string
+     * @var array|null
      */
     private $buyerRaw;
 
@@ -323,18 +323,18 @@ class HCInvoiceDTO extends HCBaseDTO
     }
 
     /**
-     * @return string|nullable
+     * @return array|null
      */
-    public function getSellerRaw(): ?string
+    public function getSellerRaw(): ?array
     {
         return $this->sellerRaw;
     }
 
     /**
-     * @param string $sellerRaw
+     * @param array $sellerRaw
      * @return HCInvoiceDTO
      */
-    public function setSellerRaw(string $sellerRaw): HCInvoiceDTO
+    public function setSellerRaw(array $sellerRaw): HCInvoiceDTO
     {
         $this->sellerRaw = $sellerRaw;
 
@@ -382,16 +382,16 @@ class HCInvoiceDTO extends HCBaseDTO
     /**
      * @return string|nullable
      */
-    public function getBuyerRaw(): ?string
+    public function getBuyerRaw(): ?array
     {
         return $this->buyerRaw;
     }
 
     /**
-     * @param string $buyerRaw
+     * @param array $buyerRaw
      * @return HCInvoiceDTO
      */
-    public function setBuyerRaw(string $buyerRaw): HCInvoiceDTO
+    public function setBuyerRaw(array $buyerRaw): HCInvoiceDTO
     {
         $this->buyerRaw = $buyerRaw;
 
@@ -422,7 +422,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getTotalPrice(): float
     {
-        return $this->totalPrice;
+        return $this->totalPrice ?? 0.0;
     }
 
     /**
@@ -441,7 +441,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getTotalPriceBeforeTax(): float
     {
-        return $this->totalPriceBeforeTax;
+        return $this->totalPriceBeforeTax ?? 0.0;
     }
 
     /**
@@ -460,7 +460,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getTotalPriceTaxAmount(): float
     {
-        return $this->totalPriceTaxAmount;
+        return $this->totalPriceTaxAmount ?? 0.0;
     }
 
     /**
@@ -479,7 +479,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getTotalDiscount(): float
     {
-        return $this->totalDiscount;
+        return $this->totalDiscount ?? 0.0;
     }
 
     /**
@@ -498,7 +498,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getTotalDiscountBeforeTax(): float
     {
-        return $this->totalDiscountBeforeTax;
+        return $this->totalDiscountBeforeTax ?? 0.0;
     }
 
     /**
@@ -517,7 +517,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getTotalDiscountTaxAmount(): float
     {
-        return $this->totalDiscountTaxAmount;
+        return $this->totalDiscountTaxAmount ?? 0.0;
     }
 
     /**
@@ -536,7 +536,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getFinalPrice(): float
     {
-        return $this->finalPrice;
+        return $this->finalPrice ?? 0.0;
     }
 
     /**
@@ -555,7 +555,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getFinalPriceBeforeTax(): float
     {
-        return $this->finalPriceBeforeTax;
+        return $this->finalPriceBeforeTax ?? 0.0;
     }
 
     /**
@@ -574,7 +574,7 @@ class HCInvoiceDTO extends HCBaseDTO
      */
     public function getFinalPriceTaxAmount(): float
     {
-        return $this->finalPriceTaxAmount;
+        return $this->finalPriceTaxAmount ?? 0.0;
     }
 
     /**
