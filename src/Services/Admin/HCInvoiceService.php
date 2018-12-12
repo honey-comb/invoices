@@ -72,16 +72,17 @@ class HCInvoiceService
 
     /**
      * @param array $invoiceData
+     * @param string|null $series
      * @return HCInvoice
      * @throws HCInvoiceException
      * @throws \ReflectionException
      */
-    public function createAdvanceInvoice(array $invoiceData): HCInvoice
+    public function createAdvanceInvoice(array $invoiceData, ?string $series = null): HCInvoice
     {
         $this->validateInvoiceData($invoiceData);
 
         $invoiceData['status'] = HCInvoiceStatusEnum::advanced()->id();
-        $invoiceData['series'] = null;
+        $invoiceData['series'] = $series;
         $invoiceData['sequence'] = null;
 
         $invoice = $this->getRepository()->create($invoiceData);

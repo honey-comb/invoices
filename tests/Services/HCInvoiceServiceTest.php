@@ -75,7 +75,8 @@ class HCInvoiceServiceTest extends TestCase
      */
     public function it_must_create_advance_invoice(): void
     {
-        $result = $this->getTestClassInstance()->createAdvanceInvoice([
+        $series = 'WT';
+        $invoiceData = [
             'primary_currency' => 'EUR',
             'buyer_raw' => ['buyer_raw' => 'json_field'],
 
@@ -120,10 +121,14 @@ class HCInvoiceServiceTest extends TestCase
                     'final_price_tax_amount' => 0.21,
                 ],
             ],
-        ]);
+        ];
+
+        $result = $this->getTestClassInstance()->createAdvanceInvoice($invoiceData, $series);
         $this->assertInstanceOf(HCInvoice::class, $result);
         $this->assertDatabaseHas('hc_invoice', [
             'status' => 'advanced',
+            'series' => $series,
+            'sequence' => null,
 
             'primary_currency' => 'EUR',
             'buyer_raw' => json_encode(['buyer_raw' => 'json_field']),
