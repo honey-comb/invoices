@@ -64,43 +64,25 @@ class HCInvoice extends HCUuidSoftModel
         'buyerable_id',
         'buyerable_type',
         'buyer_raw',
-        'amount',
-        'vat',
-        'amount_total',
         'payment_method',
+        'total_price',
+        'total_price_before_tax',
+        'total_price_tax_amount',
+        'total_discount',
+        'total_discount_before_tax',
+        'total_discount_tax_amount',
+        'final_price',
+        'final_price_before_tax',
+        'final_price_tax_amount',
     ];
 
     /**
      * @var array
      */
-    protected $appends = [
-        'seller',
-        'buyer',
+    protected $casts = [
+        'seller_raw' => 'array',
+        'buyer_raw' => 'array',
     ];
-
-    /**
-     * @return array
-     */
-    public function getBuyerAttribute(): array
-    {
-        if (filled($this->buyer_raw)) {
-            return json_decode($this->buyer_raw, true);
-        }
-
-        return [];
-    }
-
-    /**
-     * @return array
-     */
-    public function getSellerAttribute(): array
-    {
-        if (filled($this->seller_raw)) {
-            return json_decode($this->seller_raw, true);
-        }
-
-        return [];
-    }
 
     /**
      * @return HasMany

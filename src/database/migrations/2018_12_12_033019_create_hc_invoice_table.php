@@ -65,11 +65,19 @@ class CreateHcInvoiceTable extends Migration
             $table->string('buyerable_type')->nullable();
             $table->text('buyer_raw')->nullable();
 
-            $table->float('amount', 20, 6)->default(0.000000);
-            $table->float('vat', 20, 6)->default(0.000000);
-            $table->float('amount_total', 20, 6)->default(0.000000);
-
             $table->string('payment_method')->nullable();
+
+            $table->float('total_price', 20, 6)->default(0.000000);
+            $table->float('total_price_before_tax', 20, 6)->default(0.000000);
+            $table->float('total_price_tax_amount', 20, 6)->default(0.000000);
+
+            $table->float('total_discount', 20, 6)->default(0.000000);
+            $table->float('total_discount_before_tax', 20, 6)->default(0.000000);
+            $table->float('total_discount_tax_amount', 20, 6)->default(0.000000);
+
+            $table->float('final_price', 20, 6)->default(0.000000);
+            $table->float('final_price_before_tax', 20, 6)->default(0.000000);
+            $table->float('final_price_tax_amount', 20, 6)->default(0.000000);
         });
     }
 

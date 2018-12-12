@@ -41,32 +41,52 @@ use Faker\Generator as Faker;
 $factory->define(\HoneyComb\Invoices\Models\HCInvoiceItem::class, function (Faker $faker) {
     $currency = 'EUR';
     $quantity = rand(1, 5);
-    $unitPrice = $faker->randomFloat(3, 20);
-    $amount = $quantity * $unitPrice;
-    $vat = $faker->randomFloat(1, 2);
-    $vatTotal = $vat * $quantity;
-    $discount = $faker->randomFloat(0, 1);
-    $discountTotal = $discount * $quantity;
-    $amountTotal = $amount + $vat;
+
+    $unitPrice = $faker->randomFloat(10, 15);
+    $unitDiscount = $faker->randomFloat(1, 3);
+
+    $totalPrice = $quantity * $unitPrice;
+    $totalDiscount = $quantity * $unitDiscount;
+    $finalPrice = $totalPrice - $totalDiscount;
 
     return [
-        'invoice_id' => function () use ($amount, $vat, $amountTotal) {
+        'invoice_id' => function () use ($totalPrice, $totalDiscount, $finalPrice) {
             return factory(\HoneyComb\Invoices\Models\HCInvoice::class)->create([
-                'amount' => $amount,
-                'vat' => $vat,
-                'amount_total' => $amountTotal,
+                'total_price' => $totalPrice,
+                'total_price_before_tax' => $totalPrice - $totalPrice * 0.21,
+                'total_price_tax_amount' => $totalPrice * 0.21,
+                'total_discount' => $totalDiscount,
+                'total_discount_before_tax' => $totalDiscount - $totalDiscount * 0.21,
+                'total_discount_tax_amount' => $totalDiscount * 0.21,
+                'final_price' => $finalPrice,
+                'final_price_before_tax' => $finalPrice - $finalPrice * 0.21,
+                'final_price_tax_amount' => $finalPrice * 0.21,
             ])->id;
         },
         'label' => $faker->name,
         'quantity' => $quantity,
         'unit_type' => array_rand(['kg', 'g', 'unit']),
+
         'unit_price' => $unitPrice,
-        'discount' => $discount,
-        'amount' => $amount,
-        'vat' => $vat,
-        'vat_total' => $vatTotal,
-        'discount_total' => $discountTotal,
-        'amount_total' => $amountTotal,
+        'unit_price_before_tax' => $unitPrice - $unitPrice * 0.21,
+        'unit_price_tax_amount' => $unitPrice * 0.21,
+
+        'unit_discount' => $unitDiscount,
+        'unit_discount_before_tax' => $unitDiscount - $unitDiscount * 0.21,
+        'unit_discount_tax_amount' => $unitDiscount * 0.21,
+
+        'total_price' => $totalPrice,
+        'total_price_before_tax' => $totalPrice - $totalPrice * 0.21,
+        'total_price_tax_amount' => $totalPrice * 0.21,
+
+        'total_discount' => $totalDiscount,
+        'total_discount_before_tax' => $totalDiscount - $totalDiscount * 0.21,
+        'total_discount_tax_amount' => $totalDiscount * 0.21,
+
+        'final_price' => $finalPrice,
+        'final_price_before_tax' => $finalPrice - $finalPrice * 0.21,
+        'final_price_tax_amount' => $finalPrice * 0.21,
+
         'currency' => $currency,
     ];
 });

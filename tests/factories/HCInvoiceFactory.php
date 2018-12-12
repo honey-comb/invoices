@@ -39,12 +39,30 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(\HoneyComb\Invoices\Models\HCInvoice::class, function (Faker $faker) {
+    $quantity = rand(1, 5);
+
+    $unitPrice = $faker->randomFloat(10, 15);
+    $unitDiscount = $faker->randomFloat(1, 3);
+
+    $totalPrice = $quantity * $unitPrice;
+    $totalDiscount = $quantity * $unitDiscount;
+    $finalPrice = $totalPrice - $totalDiscount;
+
     return [
         'primary_currency' => 'EUR',
         'seller_raw' => $faker->text,
         'buyer_raw' => $faker->text,
-        'amount' => $faker->randomFloat(1, 100),
-        'vat' => 0,
-        'amount_total' => $faker->randomFloat(1, 100),
+
+        'total_price' => $totalPrice,
+        'total_price_before_tax' => $totalPrice - $totalPrice * 0.21,
+        'total_price_tax_amount' => $totalPrice * 0.21,
+
+        'total_discount' => $totalDiscount,
+        'total_discount_before_tax' => $totalDiscount - $totalDiscount * 0.21,
+        'total_discount_tax_amount' => $totalDiscount * 0.21,
+
+        'final_price' => $finalPrice,
+        'final_price_before_tax' => $finalPrice - $finalPrice * 0.21,
+        'final_price_tax_amount' => $finalPrice * 0.21,
     ];
 });

@@ -207,9 +207,9 @@ class HCInvoiceService
         if (!array_has($invoiceData, [
             'primary_currency',
             'buyer_raw',
-            'amount',
-            'vat',
-            'amount_total',
+            'final_price',
+            'final_price_before_tax',
+            'final_price_tax_amount',
             'items',
         ])) {
             throw new HCInvoiceException('Invoice data missing required fields');
@@ -225,10 +225,10 @@ class HCInvoiceService
                 'quantity',
                 'unit_type',
                 'unit_price',
-                'discount',
-                'amount',
-                'vat',
-                'amount_total',
+                'total_price',
+                'final_price',
+                'final_price_before_tax',
+                'final_price_tax_amount',
             ])) {
                 throw new HCInvoiceException('Invoice item data missing required fields');
             }

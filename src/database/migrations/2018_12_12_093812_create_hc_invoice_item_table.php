@@ -25,9 +25,9 @@
  * https://innovationbase.eu
  */
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Class CreateHcInvoiceItemTable
@@ -50,15 +50,32 @@ class CreateHcInvoiceItemTable extends Migration
             $table->uuid('invoice_id');
             $table->string('label', 1000);
             $table->float('quantity', 8, 4);
+            $table->string('type', 50)->nullable()->index();
             $table->string('unit_type', 20)->nullable();
-            $table->float('unit_price', 20, 6)->default('0.000000');
-            $table->float('discount', 20, 6)->default('0.000000');
-            $table->float('amount', 20, 6)->default('0.000000');
-            $table->float('vat', 20, 6)->default('0.000000');
-            $table->float('discount_total', 20, 6)->default('0.000000');
-            $table->float('vat_total', 20, 6)->default('0.000000');
-            $table->float('amount_total', 20, 6)->default('0.000000');
             $table->string('currency', 3);
+
+            $table->string('tax_name', 100)->nullable();
+            $table->smallInteger('tax_value')->default(0);
+
+            $table->float('unit_price', 20, 6)->default(0)->index();
+            $table->float('unit_price_before_tax', 20, 6)->default(0);
+            $table->float('unit_price_tax_amount', 20, 6)->default(0);
+
+            $table->float('unit_discount', 20, 6)->default(0);
+            $table->float('unit_discount_before_tax', 20, 6)->default(0);
+            $table->float('unit_discount_tax_amount', 20, 6)->default(0);
+
+            $table->float('total_price', 20, 6)->default(0);
+            $table->float('total_price_before_tax', 20, 6)->default(0);
+            $table->float('total_price_tax_amount', 20, 6)->default(0);
+
+            $table->float('total_discount', 20, 6)->default(0);
+            $table->float('total_discount_before_tax', 20, 6)->default(0);
+            $table->float('total_discount_tax_amount', 20, 6)->default(0);
+
+            $table->float('final_price', 20, 6)->default(0);
+            $table->float('final_price_before_tax', 20, 6)->default(0);
+            $table->float('final_price_tax_amount', 20, 6)->default(0);
 
             $table->foreign('invoice_id')->references('id')->on('hc_invoice')->onDelete('CASCADE');
         });

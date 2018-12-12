@@ -77,43 +77,95 @@ class HCInvoiceServiceTest extends TestCase
     {
         $result = $this->getTestClassInstance()->createAdvanceInvoice([
             'primary_currency' => 'EUR',
-            'buyer_raw' => 'buyer_raw',
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
+            'buyer_raw' => ['buyer_raw' => 'json_field'],
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
+
             'items' => [
                 [
                     'label' => 'test',
                     'quantity' => 1,
                     'unit_type' => 'kg',
                     'unit_price' => 10.45,
-                    'discount' => 0,
-                    'amount' => 10.45,
-                    'vat' => 2,
-                    'amount_total' => 12.45,
                     'currency' => 'EUR',
+
+                    'unit_price' => 1.21,
+                    'unit_price_before_tax' => 1.00,
+                    'unit_price_tax_amount' => 0.21,
+
+                    'unit_discount' => 0,
+                    'unit_discount_before_tax' => 0,
+                    'unit_discount_tax_amount' => 0,
+
+                    'total_price' => 1.21,
+                    'total_price_before_tax' => 1.00,
+                    'total_price_tax_amount' => 0.21,
+
+                    'total_discount' => 0,
+                    'total_discount_before_tax' => 0,
+                    'total_discount_tax_amount' => 0,
+
+                    'final_price' => 1.21,
+                    'final_price_before_tax' => 1.00,
+                    'final_price_tax_amount' => 0.21,
                 ],
             ],
         ]);
         $this->assertInstanceOf(HCInvoice::class, $result);
         $this->assertDatabaseHas('hc_invoice', [
-            'primary_currency' => 'EUR',
-            'buyer_raw' => 'buyer_raw',
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
             'status' => 'advanced',
+
+            'primary_currency' => 'EUR',
+            'buyer_raw' => json_encode(['buyer_raw' => 'json_field']),
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
         ]);
         $this->assertDatabaseHas('hc_invoice_item', [
             'label' => 'test',
             'quantity' => 1,
             'unit_type' => 'kg',
             'unit_price' => 10.45,
-            'discount' => 0,
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
             'currency' => 'EUR',
+
+            'unit_price' => 1.21,
+            'unit_price_before_tax' => 1.00,
+            'unit_price_tax_amount' => 0.21,
+
+            'unit_discount' => 0,
+            'unit_discount_before_tax' => 0,
+            'unit_discount_tax_amount' => 0,
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
         ]);
         $this->assertDatabaseHas('hc_invoice_status_history', [
             'invoice_id' => $result->id,
@@ -129,21 +181,47 @@ class HCInvoiceServiceTest extends TestCase
     {
         $result = $this->getTestClassInstance()->createIssueInvoice('HC', [
             'primary_currency' => 'EUR',
-            'buyer_raw' => 'buyer_raw',
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
+            'buyer_raw' => ['buyer_raw' => 'json_field'],
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
+
             'items' => [
                 [
                     'label' => 'test',
                     'quantity' => 1,
                     'unit_type' => 'kg',
                     'unit_price' => 10.45,
-                    'discount' => 0,
-                    'amount' => 10.45,
-                    'vat' => 2,
-                    'amount_total' => 12.45,
                     'currency' => 'EUR',
+
+                    'unit_price' => 1.21,
+                    'unit_price_before_tax' => 1.00,
+                    'unit_price_tax_amount' => 0.21,
+
+                    'unit_discount' => 0,
+                    'unit_discount_before_tax' => 0,
+                    'unit_discount_tax_amount' => 0,
+
+                    'total_price' => 1.21,
+                    'total_price_before_tax' => 1.00,
+                    'total_price_tax_amount' => 0.21,
+
+                    'total_discount' => 0,
+                    'total_discount_before_tax' => 0,
+                    'total_discount_tax_amount' => 0,
+
+                    'final_price' => 1.21,
+                    'final_price_before_tax' => 1.00,
+                    'final_price_tax_amount' => 0.21,
                 ],
             ],
         ]);
@@ -153,22 +231,46 @@ class HCInvoiceServiceTest extends TestCase
             'series' => 'HC',
             'sequence' => '00001',
             'primary_currency' => 'EUR',
-            'buyer_raw' => 'buyer_raw',
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
-            'status' => 'issued',
+            'buyer_raw' => json_encode(['buyer_raw' => 'json_field']),
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
         ]);
         $this->assertDatabaseHas('hc_invoice_item', [
             'label' => 'test',
             'quantity' => 1,
             'unit_type' => 'kg',
             'unit_price' => 10.45,
-            'discount' => 0,
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
             'currency' => 'EUR',
+
+            'unit_price' => 1.21,
+            'unit_price_before_tax' => 1.00,
+            'unit_price_tax_amount' => 0.21,
+
+            'unit_discount' => 0,
+            'unit_discount_before_tax' => 0,
+            'unit_discount_tax_amount' => 0,
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
         ]);
         $this->assertDatabaseHas('hc_invoice_status_history', [
             'invoice_id' => $result->id,
@@ -184,21 +286,47 @@ class HCInvoiceServiceTest extends TestCase
     {
         $result = $this->getTestClassInstance()->createPayedInvoice('HC', [
             'primary_currency' => 'EUR',
-            'buyer_raw' => 'buyer_raw',
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
+            'buyer_raw' => ['buyer_raw' => 'json_field'],
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
+
             'items' => [
                 [
                     'label' => 'test',
                     'quantity' => 1,
                     'unit_type' => 'kg',
                     'unit_price' => 10.45,
-                    'discount' => 0,
-                    'amount' => 10.45,
-                    'vat' => 2,
-                    'amount_total' => 12.45,
                     'currency' => 'EUR',
+
+                    'unit_price' => 1.21,
+                    'unit_price_before_tax' => 1.00,
+                    'unit_price_tax_amount' => 0.21,
+
+                    'unit_discount' => 0,
+                    'unit_discount_before_tax' => 0,
+                    'unit_discount_tax_amount' => 0,
+
+                    'total_price' => 1.21,
+                    'total_price_before_tax' => 1.00,
+                    'total_price_tax_amount' => 0.21,
+
+                    'total_discount' => 0,
+                    'total_discount_before_tax' => 0,
+                    'total_discount_tax_amount' => 0,
+
+                    'final_price' => 1.21,
+                    'final_price_before_tax' => 1.00,
+                    'final_price_tax_amount' => 0.21,
                 ],
             ],
         ]);
@@ -208,10 +336,19 @@ class HCInvoiceServiceTest extends TestCase
             'series' => 'HC',
             'sequence' => '00001',
             'primary_currency' => 'EUR',
-            'buyer_raw' => 'buyer_raw',
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
+            'buyer_raw' => json_encode(['buyer_raw' => 'json_field']),
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
             'status' => 'payed',
         ]);
         $this->assertDatabaseHas('hc_invoice_item', [
@@ -219,11 +356,27 @@ class HCInvoiceServiceTest extends TestCase
             'quantity' => 1,
             'unit_type' => 'kg',
             'unit_price' => 10.45,
-            'discount' => 0,
-            'amount' => 10.45,
-            'vat' => 2,
-            'amount_total' => 12.45,
             'currency' => 'EUR',
+
+            'unit_price' => 1.21,
+            'unit_price_before_tax' => 1.00,
+            'unit_price_tax_amount' => 0.21,
+
+            'unit_discount' => 0,
+            'unit_discount_before_tax' => 0,
+            'unit_discount_tax_amount' => 0,
+
+            'total_price' => 1.21,
+            'total_price_before_tax' => 1.00,
+            'total_price_tax_amount' => 0.21,
+
+            'total_discount' => 0,
+            'total_discount_before_tax' => 0,
+            'total_discount_tax_amount' => 0,
+
+            'final_price' => 1.21,
+            'final_price_before_tax' => 1.00,
+            'final_price_tax_amount' => 0.21,
         ]);
         $this->assertDatabaseHas('hc_invoice_status_history', [
             'invoice_id' => $result->id,

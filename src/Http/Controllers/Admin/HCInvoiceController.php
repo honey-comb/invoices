@@ -113,12 +113,17 @@ class HCInvoiceController extends HCBaseController
             'buyerable_id' => $this->headerText(trans('HCInvoices::invoices.buyerable_id')),
             'buyerable_type' => $this->headerText(trans('HCInvoices::invoices.buyerable_type')),
             'buyer_raw' => $this->headerText(trans('HCInvoices::invoices.buyer_raw')),
-            'amount' => $this->headerText(trans('HCInvoices::invoices.amount')),
-            'vat' => $this->headerText(trans('HCInvoices::invoices.vat')),
-            'amount_total' => $this->headerText(trans('HCInvoices::invoices.amount_total')),
-            'discount_total' => $this->headerText(trans('HCInvoices::invoices.discount_total')),
-            'vat_total' => $this->headerText(trans('HCInvoices::invoices.vat_total')),
             'payment_method' => $this->headerText(trans('HCInvoices::invoices.payment_method')),
+
+            'total_price' => $this->headerText(trans('HCInvoices::invoices.total_price')),
+            'total_price_before_tax' => $this->headerText(trans('HCInvoices::invoices.total_price_before_tax')),
+            'total_price_tax_amount' => $this->headerText(trans('HCInvoices::invoices.total_price_tax_amount')),
+            'total_discount' => $this->headerText(trans('HCInvoices::invoices.total_discount')),
+            'total_discount_before_tax' => $this->headerText(trans('HCInvoices::invoices.total_discount_before_tax')),
+            'total_discount_tax_amount' => $this->headerText(trans('HCInvoices::invoices.total_discount_tax_amount')),
+            'final_price' => $this->headerText(trans('HCInvoices::invoices.final_price')),
+            'final_price_before_tax' => $this->headerText(trans('HCInvoices::invoices.final_price_before_tax')),
+            'final_price_tax_amount' => $this->headerText(trans('HCInvoices::invoices.final_price_tax_amount')),
         ];
 
         return $columns;

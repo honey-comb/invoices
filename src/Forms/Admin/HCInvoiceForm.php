@@ -130,27 +130,10 @@ class HCInvoiceForm extends HCBaseForm
                 'label' => trans('HCInvoices::invoices.buyer_raw'),
 
             ],
-            $prefix . 'amount' => [
-                'type' => 'singleLine',
-                'label' => trans('HCInvoices::invoices.amount'),
-                'required' => 1,
-            ],
-            $prefix . 'vat' => [
-                'type' => 'singleLine',
-                'label' => trans('HCInvoices::invoices.vat'),
-                'required' => 1,
-            ],
-            $prefix . 'amount_total' => [
-                'type' => 'singleLine',
-                'label' => trans('HCInvoices::invoices.amount_total'),
-                'required' => 1,
-            ],
             $prefix . 'payment_method' => [
                 'type' => 'singleLine',
                 'label' => trans('HCInvoices::invoices.payment_method'),
-
             ],
-
         ];
     }
 

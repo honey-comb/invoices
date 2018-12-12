@@ -122,6 +122,51 @@ class HCInvoiceDTO extends HCBaseDTO
     private $items;
 
     /**
+     * @var float
+     */
+    private $totalPrice;
+
+    /**
+     * @var float
+     */
+    private $totalPriceBeforeTax;
+
+    /**
+     * @var float
+     */
+    private $totalPriceTaxAmount;
+
+    /**
+     * @var float
+     */
+    private $totalDiscount;
+
+    /**
+     * @var float
+     */
+    private $totalDiscountBeforeTax;
+
+    /**
+     * @var float
+     */
+    private $totalDiscountTaxAmount;
+
+    /**
+     * @var float
+     */
+    private $finalPrice;
+
+    /**
+     * @var float
+     */
+    private $finalPriceBeforeTax;
+
+    /**
+     * @var float
+     */
+    private $finalPriceTaxAmount;
+
+    /**
      * @return string|null
      */
     public function getInvoiceDate(): ?string
@@ -354,63 +399,6 @@ class HCInvoiceDTO extends HCBaseDTO
     }
 
     /**
-     * @return float
-     */
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float $amount
-     * @return HCInvoiceDTO
-     */
-    public function setAmount(float $amount): HCInvoiceDTO
-    {
-        $this->amount = $amount;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getVat(): float
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param float $vat
-     * @return HCInvoiceDTO
-     */
-    public function setVat(float $vat): HCInvoiceDTO
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAmountTotal(): float
-    {
-        return $this->amountTotal;
-    }
-
-    /**
-     * @param float $amountTotal
-     * @return HCInvoiceDTO
-     */
-    public function setAmountTotal(float $amountTotal): HCInvoiceDTO
-    {
-        $this->amountTotal = $amountTotal;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getPaymentMethod(): ?string
@@ -425,6 +413,177 @@ class HCInvoiceDTO extends HCBaseDTO
     public function setPaymentMethod(string $paymentMethod): HCInvoiceDTO
     {
         $this->paymentMethod = $paymentMethod;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalPrice(): float
+    {
+        return $this->totalPrice;
+    }
+
+    /**
+     * @param float $totalPrice
+     * @return HCInvoiceDTO
+     */
+    public function setTotalPrice(float $totalPrice): HCInvoiceDTO
+    {
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalPriceBeforeTax(): float
+    {
+        return $this->totalPriceBeforeTax;
+    }
+
+    /**
+     * @param float $totalPriceBeforeTax
+     * @return HCInvoiceDTO
+     */
+    public function setTotalPriceBeforeTax(float $totalPriceBeforeTax): HCInvoiceDTO
+    {
+        $this->totalPriceBeforeTax = $totalPriceBeforeTax;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalPriceTaxAmount(): float
+    {
+        return $this->totalPriceTaxAmount;
+    }
+
+    /**
+     * @param float $totalPriceTaxAmount
+     * @return HCInvoiceDTO
+     */
+    public function setTotalPriceTaxAmount(float $totalPriceTaxAmount): HCInvoiceDTO
+    {
+        $this->totalPriceTaxAmount = $totalPriceTaxAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalDiscount(): float
+    {
+        return $this->totalDiscount;
+    }
+
+    /**
+     * @param float $totalDiscount
+     * @return HCInvoiceDTO
+     */
+    public function setTotalDiscount(float $totalDiscount): HCInvoiceDTO
+    {
+        $this->totalDiscount = $totalDiscount;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalDiscountBeforeTax(): float
+    {
+        return $this->totalDiscountBeforeTax;
+    }
+
+    /**
+     * @param float $totalDiscountBeforeTax
+     * @return HCInvoiceDTO
+     */
+    public function setTotalDiscountBeforeTax(float $totalDiscountBeforeTax): HCInvoiceDTO
+    {
+        $this->totalDiscountBeforeTax = $totalDiscountBeforeTax;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalDiscountTaxAmount(): float
+    {
+        return $this->totalDiscountTaxAmount;
+    }
+
+    /**
+     * @param float $totalDiscountTaxAmount
+     * @return HCInvoiceDTO
+     */
+    public function setTotalDiscountTaxAmount(float $totalDiscountTaxAmount): HCInvoiceDTO
+    {
+        $this->totalDiscountTaxAmount = $totalDiscountTaxAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFinalPrice(): float
+    {
+        return $this->finalPrice;
+    }
+
+    /**
+     * @param float $finalPrice
+     * @return HCInvoiceDTO
+     */
+    public function setFinalPrice(float $finalPrice): HCInvoiceDTO
+    {
+        $this->finalPrice = $finalPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFinalPriceBeforeTax(): float
+    {
+        return $this->finalPriceBeforeTax;
+    }
+
+    /**
+     * @param float $finalPriceBeforeTax
+     * @return HCInvoiceDTO
+     */
+    public function setFinalPriceBeforeTax(float $finalPriceBeforeTax): HCInvoiceDTO
+    {
+        $this->finalPriceBeforeTax = $finalPriceBeforeTax;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFinalPriceTaxAmount(): float
+    {
+        return $this->finalPriceTaxAmount;
+    }
+
+    /**
+     * @param float $finalPriceTaxAmount
+     * @return HCInvoiceDTO
+     */
+    public function setFinalPriceTaxAmount(float $finalPriceTaxAmount): HCInvoiceDTO
+    {
+        $this->finalPriceTaxAmount = $finalPriceTaxAmount;
 
         return $this;
     }
@@ -466,10 +625,20 @@ class HCInvoiceDTO extends HCBaseDTO
             'buyerable_id' => $this->getBuyerableId(),
             'buyerable_type' => $this->getBuyerableType(),
             'buyer_raw' => $this->getBuyerRaw(),
-            'amount' => $this->getAmount(),
-            'vat' => $this->getVat(),
-            'amount_total' => $this->getAmountTotal(),
             'payment_method' => $this->getPaymentMethod(),
+
+            'total_price' => $this->getTotalPrice(),
+            'total_price_before_tax' => $this->getTotalPriceBeforeTax(),
+            'total_price_tax_amount' => $this->getTotalPriceTaxAmount(),
+
+            'total_discount' => $this->getTotalDiscount(),
+            'total_discount_before_tax' => $this->getTotalDiscountBeforeTax(),
+            'total_discount_tax_amount' => $this->getTotalDiscountTaxAmount(),
+
+            'final_price' => $this->getFinalPrice(),
+            'final_price_before_tax' => $this->getFinalPriceBeforeTax(),
+            'final_price_tax_amount' => $this->getFinalPriceTaxAmount(),
+
             'items' => $this->getItems(),
         ];
     }
